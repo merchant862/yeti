@@ -1,0 +1,37 @@
+#app_common_modal .app_modal_body iframe {
+    min-height: 344px;
+}
+#app_common_modal .app_modal_body {
+    min-height: auto;
+    margin: auto;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#app_common_modal,
+#error_handler_overlay {
+    overflow-y: hidden !important;
+}
+#app_common_modal_close,
+#error_handler_overlay_close {
+    line-height: 26px;
+}
+@media only screen and (min-device-width : 320px) and (max-device-width : 991px) and (orientation : landscape) {
+    #app_common_modal .app_modal_body {
+        min-height: 280px;
+    }
+    #app_common_modal .app_modal_body iframe {
+        min-height: 242px;
+    }
+    #error_handler_overlay .error_handler_body ul {
+        padding: 0;
+        margin: 0;
+        height: 200px;
+        overflow-y: scroll;
+    }
+}
+@media screen and (max-device-width : 767px) {
+    #error_handler_overlay .error_handler_body ul {
+        padding: 0;
+        margin: 0;
+    }
+}

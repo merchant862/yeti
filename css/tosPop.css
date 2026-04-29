@@ -1,0 +1,227 @@
+.app-benchmark {
+    position: fixed;
+    width: 98%;
+    left: 0;
+    bottom: 0;
+    padding: 5px 1%;
+    background-color: #CCC;
+    color: #333;
+    text-align: right
+}
+.exitpop-content {
+    position: fixed;
+    height: 400px;
+    width: 708px;
+    margin: -200px 0 0 -354px;
+    top: 50%;
+    left: 50%;
+    text-align: left;
+    padding: 0;
+    border: 0;
+    z-index: 2147483647
+}
+.exitpopup-overlay {
+    background: rgba(0, 0, 0, .6);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 2147483647;
+    display: none
+}
+.exitpop-content img {
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+    max-width: 100%;
+    height: auto
+}
+.exitpop-discountbar {
+    background-color: red;
+    border-bottom: 4px dashed #fff;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    height: 50px;
+    line-height: 50px;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+    display: none
+}
+.app-load-spinner {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    background-color: #333;
+    border-radius: 100%
+}
+@-webkit-keyframes scaleout {
+    0% {
+        -webkit-transform: scale(0)
+    }
+    100% {
+        -webkit-transform: scale(1);
+        opacity: 0
+    }
+}
+@keyframes scaleout {
+    0% {
+        transform: scale(0);
+        -webkit-transform: scale(0)
+    }
+    100% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        opacity: 0
+    }
+}
+.sf-submit-loader-container {
+    display: none;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 1000
+}
+.sf-submit-loader-content {
+    margin: auto;
+    text-align: center;
+}
+.sf-submit-loader-text {
+    font-size: 26px;
+    margin-bottom: 6px;
+    color: rgba(0, 0, 0, 0.52);
+    letter-spacing: 1.2px;
+}
+.lds-dual-ring {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+}
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 46px;
+    height: 46px;
+    margin: 1px;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.sq-input {
+    height: 40px;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    background-color: white;
+    display: inline-block;
+    -webkit-transition: border-color .1s ease-in-out;
+    -moz-transition: border-color .1s ease-in-out;
+    -ms-transition: border-color .1s ease-in-out;
+    transition: border-color .1s ease-in-out;
+}
+.sq-input--focus {
+    border: 1px solid rgb(57, 142, 231);
+}
+.sq-input--error {
+    border: 1px solid #E02F2F;
+}
+.priceol {
+    width: 7rem;
+    top: 10px;
+}
+#pay-price {
+    width: 8rem;
+    height: 8rem;
+    position: absolute;
+    background: #0071dc;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: bolder;
+    z-index: 2;
+    border-radius: 5rem;
+    left: 64%;
+    border: solid 3px white;
+    line-height: 1.5rem;
+    padding-top: 10px;
+}
+.pre {
+    font-size: 0.9rem;
+    line-height: 0;
+}
+.prd-price {
+    position: relative;
+    font-size: 2.5rem;
+    line-height: 2.5rem;
+    top: -3px;
+}
+.offerbar {
+    background: #0071dc !important;
+}
+.offerbarexpire {
+    color: #fff !important;
+    background: #004b92 !important;
+    font-weight: 600 !important;
+    border-top: none !important;
+    border-bottom: none !important;
+}
+.form-header {
+    background-color: #0071dc !important;
+}
+.btn-success {
+    color: #fff;
+    background-color: #F26707 !important;
+    border: none !important;
+}
+#footer {
+    background-color: #004b92 !important;
+    color: #FFF;
+}
+.btn-success:hover {
+    color: #fff;
+    background-color: #F26707 !important;
+    border: none !important;
+}
+@media (min-width: 572px) {
+    .priceol {
+        width: 10rem;
+    }
+}
+@media (min-width: 997px) {
+    .priceol {
+        width: 7rem;
+    }
+}
+@media (min-width: 1200px) {
+    .priceol {
+        width: 10rem;
+        top: 50px;
+    }
+}
+@media (max-width: 997px) {
+    .prod-img {
+        max-width: 250px;
+    }
+}
