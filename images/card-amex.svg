@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="88" height="54" viewBox="0 0 88 54" role="img" aria-label="American Express">
+  <rect width="88" height="54" rx="8" fill="#2E77BB"/>
+  <rect x="1" y="1" width="86" height="52" rx="7" fill="none" stroke="#b9daf7"/>
+  <text x="44" y="17" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="8.4" font-weight="900" fill="#fff">AMERICAN</text>
+  <path fill="#fff" d="M8 23h10.2l2.3 5.2 2.3-5.2H33v16h-7.8v-8.4L21.5 39h-2.2l-3.7-8.4V39H8V23Zm29.4 0h20v3.9H45.7v2h11.1v3.6H45.7v2.2h11.9V39H37.4V23Zm23.1 0h7.8l4.1 4.8 4.1-4.8h8L76.3 31l8.2 8h-8.3l-4-4.8-4.2 4.8h-8.2l8.2-8-7.5-8Z"/>
+</svg>
