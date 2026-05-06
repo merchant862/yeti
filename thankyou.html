@@ -23,8 +23,9 @@
 }
 .thanks { padding-left:16px; padding-right:16px; }
 .container { width:100%; max-width:1120px; }
-.footer-links { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; max-width:320px; margin-left:auto; margin-right:auto; }
-.footer-links a { margin:0; }
+.footer-links { display:block; white-space:nowrap; max-width:none; overflow-x:auto; line-height:1.5; }
+.footer-links a { margin:0 8px; }
+.footer-links a:not(:last-child)::after { content:" |"; color:#4b5e72; font-weight:400; margin-left:16px; }
 @media (max-width: 560px) {
   .thanks-card { padding:20px 18px; }
   .thanks-card .lead { max-width:300px; font-size:14px; }
