@@ -23,13 +23,23 @@ html,body{overflow-x:hidden}.offer-wrap{padding:24px 16px}.container{width:100%;
       <div class="points"><div>Goal-based workout plans for home or gym.</div><div>Meal planning with simple recipes and macro guidance.</div><div>Progress tracking for streaks, weight logs, and activity.</div></div>
       <div class="price">$54.95</div>
       <label class="check-row"><input type="checkbox" id="fitnessUpsellConsent" checked><span>Yes, add FitAccess to my order for $54.95.</span></label>
+      <div class="check-row" id="upsellError" style="display:none;border-color:#f1b3b3;background:#fff6f6;color:#b42318"></div>
       <button class="btn" id="finishUpsell" type="button">Complete Order</button>
     </div>
   </section>
 </main>
 <footer class="footer"><div class="footer-inner"><div class="footer-links"><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a><a href="refund.html">Refund Policy</a><a href="contact.html">Contact Us</a></div></div><div class="footer-disclaimer">Note: We are not responsible for any reviews, reports, emails, advertisements or blogs that may have led you to this page. If you feel any of these 3rd party reviews, advertisements, blogs or reports may be inaccurate, please contact us immediately.</div></footer>
+<script src="js/api-flow.js?v=20260525-1"></script>
 <script>
-(function(){const storagePrefix='yetiReady',upsellPrice='$54.95';const checkout=JSON.parse(sessionStorage.getItem(storagePrefix+'Checkout')||'null');if(!checkout){window.location.href='checkout.html';return}function moneyToNumber(v){return Number(String(v||'').replace(/[^0-9.]/g,''))||0}function formatMoney(v){return '$'+v.toFixed(2)}document.getElementById('finishUpsell').addEventListener('click',function(){const accepted=document.getElementById('fitnessUpsellConsent').checked;checkout.upsellConsent=accepted?'accepted':'declined';checkout.upsellPrice=accepted?upsellPrice:'$0.00';checkout.upsellProduct='FitAccess';checkout.totalCharged=accepted?formatMoney(moneyToNumber(checkout.amountCharged)+moneyToNumber(upsellPrice)):checkout.amountCharged;sessionStorage.setItem(storagePrefix+'Checkout',JSON.stringify(checkout));window.location.href='thankyou.html'})})();
+(function(){
+const flow=window.yetiApiFlow;
+const checkout=flow.getState();
+const finishButton=document.getElementById('finishUpsell');
+const upsellError=document.getElementById('upsellError');
+if(!checkout||!checkout.payment||!checkout.payment.cardLast4){window.location.href='checkout.html';return}
+function setBusy(busy){finishButton.disabled=busy;finishButton.textContent=busy?'Please wait...':'Complete Order'}
+function showError(message){upsellError.textContent=message||'';upsellError.style.display=message?'block':'none'}
+finishButton.addEventListener('click',async function(){const accepted=document.getElementById('fitnessUpsellConsent').checked;showError('');setBusy(true);const nextState={...flow.getState(),upsellPurchased:accepted,stage:'thankyou'};try{if(accepted){const upsellResponse=await flow.createUpsellPurchase(nextState);nextState.upsell={status:'approved',email:upsellResponse.email||nextState.customer?.email||'',accessExpiresAt:upsellResponse.accessExpiresAt||'',emailQueued:Boolean(upsellResponse.emailQueued),payment:upsellResponse.payment||{}}}if(!flow.saveState(nextState)){throw new Error('Please allow browser storage for this checkout and try again.')}window.location.href='thankyou.html'}catch(error){showError(error instanceof Error?error.message:'Unable to complete the upgrade right now.');setBusy(false)}})})();
 </script>
 </body>
 </html>
