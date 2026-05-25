@@ -60,7 +60,7 @@
             upsellPrice: stored.upsellPrice || defaultState.upsellPrice,
             entryAmount: Number.isFinite(Number(stored.entryAmount)) ? Number(stored.entryAmount) : defaultState.entryAmount,
             upsellAmount: Number.isFinite(Number(stored.upsellAmount)) ? Number(stored.upsellAmount) : defaultState.upsellAmount,
-            tracking: Object.keys(stored.tracking || {}).length ? stored.tracking : defaultState.tracking,
+            tracking: getEffectiveTracking(Object.keys(stored.tracking || {}).length ? stored : defaultState),
             stage: stored.stage || 'landing',
             flowNonce: stored.flowNonce || defaultState.flowNonce
         };
@@ -74,10 +74,13 @@
         const local = readStoredState(localStorage);
         const session = readStoredState(sessionStorage);
 
-        return sanitizeObject({
+        const state = sanitizeObject({
             ...local,
             ...session
         });
+
+        state.tracking = getEffectiveTracking(state);
+        return state;
     }
 
     function saveState(nextState)
@@ -94,23 +97,25 @@
     async function syncLandingClick()
     {
         const state = getState();
+        const tracking = getEffectiveTracking(state);
+        const currentClickId = tracking.click_id || '';
 
-        if (state.api?.clickSynced && state.api?.sessionId)
+        if (state.api?.clickSynced && state.api?.sessionId && (!currentClickId || currentClickId === (state.api?.trackingClickId || '')))
         {
             return state.api.sessionId;
         }
 
         const payload = {
             projectApiKey: PROJECT_API_KEY,
-            click_id: state.tracking?.click_id || '',
+            click_id: currentClickId,
             requestUri: buildCurrentUrl(),
             pageType: 'Lead',
-            affiliateId: state.tracking?.aff_id || '',
-            subAffiliateId: state.tracking?.source || '',
-            subAffiliateId2: state.tracking?.sub_source || '',
-            subAffiliateId3: state.tracking?.p1 || '',
-            subAffiliateId4: state.tracking?.p2 || '',
-            subAffiliateId5: state.tracking?.p3 || ''
+            affiliateId: tracking.aff_id || '',
+            subAffiliateId: tracking.source || '',
+            subAffiliateId2: tracking.sub_source || '',
+            subAffiliateId3: tracking.p1 || '',
+            subAffiliateId4: tracking.p2 || '',
+            subAffiliateId5: tracking.p3 || ''
         };
 
         try
@@ -118,6 +123,7 @@
             const response = await postJson('/clicks', payload);
             const nextState = {
                 ...state,
+                tracking,
                 api: {
                     ...(state.api || {}),
                     clickId: response.clickId || '',
@@ -141,8 +147,9 @@
     async function ensureLandingClick()
     {
         const state = getState();
+        const currentClickId = state.tracking?.click_id || '';
 
-        if (state.api?.sessionId)
+        if (state.api?.sessionId && (!currentClickId || currentClickId === (state.api?.trackingClickId || '')))
         {
             return state.api.sessionId;
         }
@@ -153,10 +160,11 @@
     async function createLeadRecord(state)
     {
         const customer = state.customer || {};
+        const tracking = getEffectiveTracking(state);
         const payload = {
             projectApiKey: PROJECT_API_KEY,
             sessionId: state.api?.sessionId || '',
-            click_id: state.tracking?.click_id || '',
+            click_id: tracking.click_id || '',
             firstName: customer.firstName || '',
             lastName: customer.lastName || '',
             email: customer.email || '',
@@ -166,8 +174,8 @@
             state: customer.shippingState || customer.state || '',
             countryIso: DEFAULT_COUNTRY_ISO,
             zipCode: customer.shippingZip || customer.zipCode || customer.zip || '',
-            affiliateId: state.tracking?.aff_id || '',
-            subAffiliateId: state.tracking?.source || ''
+            affiliateId: tracking.aff_id || '',
+            subAffiliateId: tracking.source || ''
         };
 
         const response = await postJson('/leads', payload);
@@ -184,11 +192,12 @@
     {
         const customer = state.customer || {};
         const payment = state.payment || {};
+        const tracking = getEffectiveTracking(state);
         const payload = {
             projectApiKey: PROJECT_API_KEY,
             leadId: state.api?.leadId || '',
             sessionId: state.api?.sessionId || '',
-            click_id: state.tracking?.click_id || '',
+            click_id: tracking.click_id || '',
             firstName: customer.firstName || '',
             lastName: customer.lastName || '',
             email: customer.email || '',
@@ -385,6 +394,14 @@
         });
 
         return sanitizeObject(output);
+    }
+
+    function getEffectiveTracking(state)
+    {
+        return sanitizeObject({
+            ...((state && state.tracking) || {}),
+            ...sanitizeTrackingParams(new URLSearchParams(window.location.search))
+        });
     }
 
     function sanitizeObject(input)
