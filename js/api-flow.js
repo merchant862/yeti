@@ -60,6 +60,7 @@
             upsellPrice: stored.upsellPrice || defaultState.upsellPrice,
             entryAmount: Number.isFinite(Number(stored.entryAmount)) ? Number(stored.entryAmount) : defaultState.entryAmount,
             upsellAmount: Number.isFinite(Number(stored.upsellAmount)) ? Number(stored.upsellAmount) : defaultState.upsellAmount,
+            customer: getEffectiveCustomer(stored),
             tracking: getEffectiveTracking(Object.keys(stored.tracking || {}).length ? stored : defaultState),
             stage: stored.stage || 'landing',
             flowNonce: stored.flowNonce || defaultState.flowNonce
@@ -79,6 +80,7 @@
             ...session
         });
 
+        state.customer = getEffectiveCustomer(state);
         state.tracking = getEffectiveTracking(state);
         return state;
     }
@@ -402,6 +404,48 @@
             ...((state && state.tracking) || {}),
             ...sanitizeTrackingParams(new URLSearchParams(window.location.search))
         });
+    }
+
+    function getEffectiveCustomer(state)
+    {
+        return sanitizeObject({
+            ...((state && state.customer) || {}),
+            firstName: sanitizeTextValue(new URLSearchParams(window.location.search).get('firstName'), 45),
+            lastName: sanitizeTextValue(new URLSearchParams(window.location.search).get('lastName'), 45),
+            email: sanitizeTextValue(new URLSearchParams(window.location.search).get('email'), 120),
+            phone: formatUsPhoneValue(new URLSearchParams(window.location.search).get('phone')),
+            shippingAddress1: sanitizeTextValue(new URLSearchParams(window.location.search).get('address'), 80),
+            shippingCity: sanitizeTextValue(new URLSearchParams(window.location.search).get('city'), 45),
+            shippingState: sanitizeTextValue(new URLSearchParams(window.location.search).get('state'), 20).toUpperCase(),
+            shippingZip: String(new URLSearchParams(window.location.search).get('zip') || '').replace(/\D/g, '').slice(0, 5)
+        });
+    }
+
+    function sanitizeTextValue(value, maxLength)
+    {
+        return String(value || '').trim().slice(0, maxLength || 120);
+    }
+
+    function formatUsPhoneValue(value)
+    {
+        const digits = String(value || '').replace(/\D/g, '').slice(0, 10);
+
+        if (digits.length > 6)
+        {
+            return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+        }
+
+        if (digits.length > 3)
+        {
+            return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+        }
+
+        if (digits.length > 0)
+        {
+            return `(${digits}`;
+        }
+
+        return '';
     }
 
     function sanitizeObject(input)

@@ -107,6 +107,8 @@
  const entryForm=document.getElementById('entryForm'); const productCarousel=document.querySelector('[data-product-carousel]'); const reviewRotator=document.getElementById('reviewRotator');
  const phoneInput=document.getElementById('phone'); const zipInput=document.getElementById('zip'); const cityInput=entryForm?entryForm.querySelector('[name="shippingCity"]'):null; const stateInput=document.getElementById('shippingState'); const submitButton=entryForm?entryForm.querySelector('button[type="submit"]'):null; const formError=document.getElementById('entryFormError');
  flow.persistLanding({productName,entryPrice,upsellPrice});
+ const prefillState=flow.getState();
+ if(entryForm&&prefillState&&prefillState.customer){['firstName','lastName','email','phone'].forEach(function(name){const input=entryForm.querySelector('[name="'+name+'"]');const value=prefillState.customer[name]||'';if(input&&value)input.value=value});[['shippingAddress1','shippingAddress1'],['shippingCity','shippingCity'],['shippingState','shippingState'],['shippingZip','shippingZip']].forEach(function(pair){const input=entryForm.querySelector('[name="'+pair[0]+'"]');const value=prefillState.customer[pair[1]]||'';if(input&&value)input.value=value})}
  void flow.syncLandingClick();
  function digits(v){return(v||'').replace(/\D/g,'')} function setError(name,show){const field=document.getElementById(name)||document.querySelector('[name="'+name+'"]');const error=document.querySelector('[data-error-for="'+name+'"]');if(field)field.classList.toggle('field-invalid',!!show);if(error)error.classList.toggle('show',!!show)}
  function setBusy(busy){if(!submitButton)return;submitButton.disabled=busy;submitButton.textContent=busy?'Please wait...':'Continue to Checkout'}
