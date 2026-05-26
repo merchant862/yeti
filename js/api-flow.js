@@ -408,17 +408,57 @@
 
     function getEffectiveCustomer(state)
     {
-        return sanitizeObject({
-            ...((state && state.customer) || {}),
-            firstName: sanitizeTextValue(new URLSearchParams(window.location.search).get('firstName'), 45),
-            lastName: sanitizeTextValue(new URLSearchParams(window.location.search).get('lastName'), 45),
-            email: sanitizeTextValue(new URLSearchParams(window.location.search).get('email'), 120),
-            phone: formatUsPhoneValue(new URLSearchParams(window.location.search).get('phone')),
-            shippingAddress1: sanitizeTextValue(new URLSearchParams(window.location.search).get('address'), 80),
-            shippingCity: sanitizeTextValue(new URLSearchParams(window.location.search).get('city'), 45),
-            shippingState: sanitizeTextValue(new URLSearchParams(window.location.search).get('state'), 20).toUpperCase(),
-            shippingZip: String(new URLSearchParams(window.location.search).get('zip') || '').replace(/\D/g, '').slice(0, 5)
-        });
+        const query = new URLSearchParams(window.location.search);
+        const customer = {
+            ...((state && state.customer) || {})
+        };
+
+        if (hasQueryValue(query, 'firstName'))
+        {
+            customer.firstName = sanitizeTextValue(query.get('firstName'), 45);
+        }
+
+        if (hasQueryValue(query, 'lastName'))
+        {
+            customer.lastName = sanitizeTextValue(query.get('lastName'), 45);
+        }
+
+        if (hasQueryValue(query, 'email'))
+        {
+            customer.email = sanitizeTextValue(query.get('email'), 120);
+        }
+
+        if (hasQueryValue(query, 'phone'))
+        {
+            customer.phone = formatUsPhoneValue(query.get('phone'));
+        }
+
+        if (hasQueryValue(query, 'address'))
+        {
+            customer.shippingAddress1 = sanitizeTextValue(query.get('address'), 80);
+        }
+
+        if (hasQueryValue(query, 'city'))
+        {
+            customer.shippingCity = sanitizeTextValue(query.get('city'), 45);
+        }
+
+        if (hasQueryValue(query, 'state'))
+        {
+            customer.shippingState = sanitizeTextValue(query.get('state'), 20).toUpperCase();
+        }
+
+        if (hasQueryValue(query, 'zip'))
+        {
+            customer.shippingZip = String(query.get('zip') || '').replace(/\D/g, '').slice(0, 5);
+        }
+
+        return sanitizeObject(customer);
+    }
+
+    function hasQueryValue(query, key)
+    {
+        return query.has(key) && String(query.get(key) || '').trim() !== '';
     }
 
     function sanitizeTextValue(value, maxLength)
