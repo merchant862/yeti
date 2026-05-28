@@ -107,6 +107,18 @@ html,body{overflow-x:hidden}.checkout-section{padding:42px 16px}.container{width
     paymentFormError.classList.toggle('show',!!message);
   }
 
+  function clearPaymentErrors()
+  {
+    showFormError('');
+    ['cardNumber','cardExpiry','cardCvv'].forEach(function(name)
+    {
+      setError(name,false);
+    });
+  }
+
+  paymentForm.addEventListener('input',clearPaymentErrors);
+  paymentForm.addEventListener('change',clearPaymentErrors);
+
   function detectBrand(v)
   {
     const d=digits(v);
