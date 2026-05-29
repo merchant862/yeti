@@ -1,47 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<title>FitAccess Offer</title>
-<style>
-:root{--bg:#eef5ff;--surface:#fff;--ink:#10233f;--muted:#60728a;--line:#d7e5f6;--brand:#1f66d1;--brand-2:#0d2f5f;--accent:#3aa7ff;--shadow:0 18px 42px rgba(19,31,45,.09)}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}.vibrant-accent{height:4px;background:linear-gradient(90deg,#0d2f5f,#1f66d1,#3aa7ff,#9ed3ff)}.container{width:min(700px,calc(100% - 32px));margin:0 auto}.offer-wrap{padding:24px 0}.upsell-card{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:0;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:0 12px 28px rgba(19,31,45,.08);overflow:hidden}.fit-visual{min-height:285px;background:url("images/fitaccess-banner.png");background-size:cover;background-position:left center;position:relative}.fit-copy{padding:18px}.eyebrow{display:inline-block;background:#eaf3ff;color:var(--brand);border-radius:999px;padding:5px 9px;font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px}h1{margin:0 0 7px;color:var(--brand-2);font-size:clamp(1.35rem,2.2vw,1.85rem);line-height:1.12}.lead{color:var(--muted);line-height:1.5;margin:0 0 10px;font-size:13px}.points{display:grid;gap:6px;margin:0 0 10px}.points div{border:1px solid var(--line);background:#f6faff;border-radius:9px;padding:7px 9px;color:#37495e;line-height:1.3;font-size:12.5px}.price{font-size:25px;color:var(--brand-2);font-weight:900;margin:3px 0 8px}.check-row{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--line);background:#f6faff;border-radius:9px;padding:9px;color:#45566a;line-height:1.3;font-size:12.5px;margin-bottom:10px}.check-row input{margin-top:2px}.btn{width:100%;min-height:44px;border:0;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--accent));color:#fff;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 10px 20px rgba(0,0,0,.10)}.footer{margin-top:26px;background:#fff;border-top:1px solid var(--line)}.footer-inner{padding:22px 0;text-align:center;width:100vw;max-width:100vw;box-sizing:border-box}.footer-links{margin-bottom:12px}.footer-links a{text-decoration:none;color:var(--brand);font-weight:700;margin:0 8px}.operator,.fine-print,.footer-disclaimer{color:#667384;font-size:13px;line-height:1.6;text-align:center}.footer-disclaimer{border-top:1px solid var(--line);background:#f6faff;padding:18px 16px;width:100vw;max-width:100vw;box-sizing:border-box}@media(max-width:880px){.upsell-card{grid-template-columns:1fr}.fit-visual{min-height:220px}.fit-copy{padding:18px}}
-html,body{overflow-x:hidden}.offer-wrap{padding:24px 16px}.container{width:100%;max-width:700px}.upsell-card,.fit-copy{min-width:0}.fit-copy *{max-width:100%;overflow-wrap:break-word}.footer-links{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px 0;max-width:100%;overflow:visible;line-height:1.5;padding:0 10px}.footer-links a{margin:0 8px;white-space:nowrap}.footer-links a:not(:last-child)::after{content:" |";color:#4b5e72;font-weight:400;margin-left:16px}
-@media(max-width:560px){.lead{max-width:300px}.footer-disclaimer{padding:16px}.footer-links{display:grid;grid-template-columns:max-content;justify-content:center;gap:10px 18px;width:calc(100vw - 32px);max-width:330px;margin:0 auto;padding:0}.footer-links a{margin:0;text-align:center}.footer-links a:not(:last-child)::after{content:"";margin-left:0}}
-@media(max-width:960px){.footer-links{display:grid!important;grid-template-columns:max-content;justify-content:center;gap:10px 18px;width:calc(100vw - 32px);max-width:330px;margin:0 auto;padding:0}.footer-links a{margin:0!important;text-align:center}.footer-links a:not(:last-child)::after{content:""!important;margin-left:0!important}}</style>
-</head>
-<body>
-<div class="vibrant-accent"></div>
-<main class="offer-wrap">
-  <section class="container upsell-card">
-    <div class="fit-visual" aria-label="FitAccess fitness dashboard preview"></div>
-    <div class="fit-copy">
-      <span class="eyebrow">Member add-on</span>
-      <h1>Add FitAccess to your order.</h1>
-      <p class="lead">FitAccess helps members stay consistent with guided training plans, practical meal direction, activity tracking, and simple daily support.</p>
-      <div class="points"><div>Goal-based workout plans for home or gym.</div><div>Meal planning with simple recipes and macro guidance.</div><div>Progress tracking for streaks, weight logs, and activity.</div></div>
-      <div class="price">$54.95</div>
-      <label class="check-row"><input type="checkbox" id="fitnessUpsellConsent" checked><span>Yes, add FitAccess to my order for $54.95.</span></label>
-      <div class="check-row" id="upsellError" style="display:none;border-color:#f1b3b3;background:#fff6f6;color:#b42318"></div>
-      <button class="btn" id="finishUpsell" type="button">Complete Order</button>
-    </div>
-  </section>
-</main>
-<footer class="footer"><div class="footer-inner"><div class="footer-links"><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a><a href="refund.html">Refund Policy</a><a href="contact.html">Contact Us</a></div></div><div class="footer-disclaimer">Note: We are not responsible for any reviews, reports, emails, advertisements or blogs that may have led you to this page. If you feel any of these 3rd party reviews, advertisements, blogs or reports may be inaccurate, please contact us immediately.</div></footer>
-<script src="js/api-flow.js?v=20260525-1"></script>
-<script>
-(function(){
-const flow=window.yetiApiFlow;
-const checkout=flow.getState();
-const finishButton=document.getElementById('finishUpsell');
-const upsellError=document.getElementById('upsellError');
-if(!checkout||!checkout.payment||!checkout.payment.cardLast4){window.location.href='checkout.html';return}
-function setBusy(busy){finishButton.disabled=busy;finishButton.textContent=busy?'Please wait...':'Complete Order'}
-function showError(message){upsellError.textContent=message||'';upsellError.style.display=message?'block':'none'}
-function clearFlowState(){['yetiReadyFlow','yetiReadyLead','yetiReadyCheckout'].forEach(function(key){try{localStorage.removeItem(key)}catch(error){}try{sessionStorage.removeItem(key)}catch(error){}})}
-function buildThankYouUrl(state){const customer=state.customer||{};const payment=state.payment||{};const search=new URLSearchParams();search.set('ty','1');search.set('pn',state.productName||'Yeti Crossroads Backpack');search.set('ea',String(Number(state.entryAmount||0)));search.set('ua',String(Number(state.upsellAmount||0)));search.set('up',state.upsellPurchased?'1':'0');search.set('fn',customer.firstName||'');search.set('ln',customer.lastName||'');search.set('em',customer.email||'');search.set('ad',[customer.shippingAddress1||customer.address1||'',customer.shippingCity||customer.city||'',customer.shippingState||customer.state||'',customer.shippingZip||customer.zip||''].filter(Boolean).join(', '));search.set('cb',payment.cardBrand||'');search.set('cl4',payment.cardLast4||'');return 'thankyou.html?'+search.toString()}
-finishButton.addEventListener('click',async function(){const accepted=document.getElementById('fitnessUpsellConsent').checked;showError('');setBusy(true);const nextState={...flow.getState(),upsellPurchased:accepted,stage:'thankyou'};try{if(accepted){const upsellResponse=await flow.createUpsellPurchase(nextState);nextState.upsell={status:'approved',email:upsellResponse.email||nextState.customer?.email||'',accessExpiresAt:upsellResponse.accessExpiresAt||'',emailQueued:Boolean(upsellResponse.emailQueued),payment:upsellResponse.payment||{}}}const thankYouUrl=buildThankYouUrl(nextState);clearFlowState();window.location.href=thankYouUrl}catch(error){showError(error instanceof Error?error.message:'Unable to complete the upgrade right now.');setBusy(false)}})})();
-</script>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="referrer" content="strict-origin-when-cross-origin">
+        <title>FitAccess Upgrade</title>
+        <link rel="stylesheet" href="css/style.css">
+        <style>
+            :root{--fit-blue:#0453f4;--fit-blue-dark:#001652;--fit-green:#049639;--fit-ink:#05092d;--fit-muted:#566076;--fit-line:#dfe6f2;--fit-bg:#f5f8fe;--fit-shadow:0 18px 42px rgba(20,34,70,.12)}
+            body{background:var(--fit-bg)}
+            .lander-footer-checkout{margin-top:0}
+            .fit-upsell-shell{padding:14px 16px 24px;background:radial-gradient(circle at 50% 0,#fff 0,#f4f8ff 62%,#edf3fb 100%);font-family:Arial,Helvetica,sans-serif;color:var(--fit-ink)}
+            .fit-upsell{width:min(1420px,100%);margin:0 auto;background:#fff;border:1px solid var(--fit-line);border-radius:10px;box-shadow:var(--fit-shadow);padding:10px 18px 22px}
+            .fit-hero{text-align:center;margin:0 auto 18px}
+            .fit-pill{display:inline-flex;align-items:center;gap:8px;border-radius:12px;background:#e8f0ff;color:#0034b7;font-size:20px;font-weight:900;line-height:1;padding:10px 26px;text-transform:uppercase}
+            .fit-pill::before{content:"";width:18px;height:18px;background:var(--fit-blue);clip-path:polygon(50% 0,61% 34%,98% 35%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,2% 35%,39% 34%)}
+            .fit-hero h1{margin:12px 0 2px;font-size:clamp(42px,4vw,58px);line-height:1.02;font-weight:900;letter-spacing:0;color:var(--fit-ink)}
+            .fit-hero h2{margin:0;color:#0036c7;font-size:clamp(28px,3vw,42px);line-height:1.08;font-weight:900}
+            .fit-hero p{margin:12px auto 0;max-width:760px;color:#3b465e;font-size:20px;line-height:1.45}
+            .fit-main-grid{display:grid;grid-template-columns:minmax(360px,1fr) minmax(420px,1.18fr);gap:18px;align-items:stretch}
+            .fit-photo-card,.fit-panel,.fit-price-card,.fit-consent-card{border:1px solid var(--fit-line);border-radius:10px;background:#fff;box-shadow:0 10px 28px rgba(30,48,90,.08)}
+            .fit-photo-card{position:relative;min-height:560px;overflow:hidden;background:url("images/fitaccess-fitness.jpg") center/cover no-repeat}
+            .fit-photo-card::after{content:"";position:absolute;inset:auto 18px 24px;border-radius:12px;height:45%;background:rgba(1,8,35,.88);box-shadow:0 18px 34px rgba(0,0,0,.28)}
+            .fit-logo-card{position:absolute;top:28px;left:34px;z-index:2;background:#fff;border-radius:9px;padding:18px 22px;box-shadow:0 10px 26px rgba(0,0,0,.12)}
+            .fit-logo-line{display:flex;align-items:center;gap:12px;font-size:32px;font-weight:900;color:#071032}
+            .fit-logo-mark{width:42px;height:42px;border-radius:8px;background:#1358ff;color:#fff;display:grid;place-items:center;font-weight:900}
+            .fit-logo-card small{display:block;margin-top:6px;color:#3d4353;font-size:18px;font-weight:800;letter-spacing:.03em;text-transform:uppercase}
+            .fit-overlay{position:absolute;left:36px;right:36px;bottom:46px;z-index:2;color:#fff}
+            .fit-member{color:#1672ff;font-size:18px;font-weight:900;text-transform:uppercase}.fit-member::before{content:"";display:inline-block;width:22px;height:18px;margin-right:10px;background:#ffd12d;clip-path:polygon(8% 35%,28% 55%,50% 10%,72% 55%,92% 35%,82% 95%,18% 95%)}
+            .fit-overlay h3{margin:18px 0 18px;font-size:38px;line-height:1.14;font-weight:900}
+            .fit-overlay p{font-size:21px;line-height:1.45;margin:0 0 22px}
+            .fit-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+            .fit-mini-icon{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:30px;font-weight:900;margin-bottom:10px}.blue{background:#0453f4}.green{background:#06a844}.purple{background:#6f23ef}
+            .fit-mini strong{display:block;font-size:18px;line-height:1.15}.fit-mini span{display:block;font-size:15px;line-height:1.25;margin-top:3px}
+            .fit-side{display:grid;gap:18px}
+            .fit-top-panels{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+            .fit-panel{padding:24px}
+            .fit-panel-title{margin:-24px -24px 22px;padding:12px 24px;border-radius:9px 9px 0 0;background:linear-gradient(100deg,#034cff,#2959e8);color:#fff;font-size:20px;font-weight:900;text-transform:uppercase}
+            .fit-feature{display:grid;grid-template-columns:72px 1fr;gap:18px;align-items:center;margin:22px 0}.fit-feature-icon{width:58px;height:58px;border-radius:14px;display:grid;place-items:center;font-size:32px}.fit-feature h4{margin:0 0 5px;font-size:21px}.fit-feature p{margin:0;color:#1f2940;font-size:16px;line-height:1.35}
+            .fit-bonus{border-left:1px solid var(--fit-line)}.fit-bonus-title{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 20px;border:1px solid #9fe5ba;border-radius:6px;color:#048136;background:#fbfffd;padding:10px;font-size:19px;font-weight:900;text-transform:uppercase}.fit-bonus h3{margin:0 0 10px;font-size:29px;line-height:1.12}.fit-bonus p,.fit-bonus li{font-size:16px;line-height:1.4}.fit-bonus ul{list-style:none;padding:0;margin:14px 0}.fit-bonus li{margin:8px 0}.fit-bonus li::before{content:"✓";color:#0a9b43;border:1px solid #0a9b43;border-radius:50%;font-size:12px;font-weight:900;margin-right:9px;padding:0 3px}.fit-bonus-value{color:#048136;font-size:20px;font-weight:900;text-transform:uppercase}
+            .fit-price-card{display:grid;grid-template-columns:1fr 110px 1.25fr 120px;gap:20px;align-items:center;padding:24px 34px;text-align:center}.fit-price-label{font-size:18px;font-weight:800;color:#5f6178}.fit-old-price{font-size:33px;color:#45475d;text-decoration:line-through;text-decoration-color:#d81835;text-decoration-thickness:4px}.fit-tag{background:#e7193c;color:#fff;clip-path:polygon(0 0,88% 0,100% 50%,88% 100%,0 100%,10% 50%);padding:14px 18px;font-weight:900;font-size:20px}.fit-current small{display:block;color:#00943b;font-weight:900;font-size:20px}.fit-current strong{display:block;color:#00943b;font-size:56px;line-height:1}.fit-current span{display:block;color:#62657b;font-weight:900;letter-spacing:.04em}.fit-save{width:112px;height:112px;border-radius:50%;background:#ffd43a;color:#080b1d;display:grid;place-items:center;font-weight:900;box-shadow:0 0 0 8px #f4bd24 inset}.fit-save span{font-size:14px}.fit-save strong{display:block;font-size:34px;line-height:.9}
+            .fit-consent-card{display:grid;grid-template-columns:1fr 230px;gap:24px;align-items:center;padding:22px 28px}.fit-choice{display:grid;grid-template-columns:36px 1fr;gap:18px;align-items:start;margin:0}.fit-choice input{width:34px;height:34px;accent-color:#0957e8}.fit-choice > span{display:block!important}.fit-choice strong{display:block!important;font-size:22px}.fit-choice span span{display:block!important;margin-top:8px;color:#202842;font-size:16px;line-height:1.45}.fit-choice b{color:#0055df}.fit-secure{border-left:1px solid var(--fit-line);padding-left:28px;text-align:center;color:#081331;font-size:18px;font-weight:800}.fit-secure-icon{font-size:44px;color:#65708b}
+            .fit-error{margin:14px 0 0}.fit-cta{width:100%;min-height:90px;margin-top:18px;border:0;border-radius:10px;background:linear-gradient(90deg,#009d3b,#00882f);box-shadow:0 10px 24px rgba(0,132,48,.28);color:#fff;font-size:30px;font-weight:900;letter-spacing:.02em;cursor:pointer}.fit-cta small{display:block;margin-top:6px;font-size:17px;font-weight:500;letter-spacing:0}.fit-cta:hover{background:linear-gradient(90deg,#008f35,#00792b)}
+            .fit-trust{display:flex;justify-content:center;gap:54px;margin:22px 0 4px;color:#596175;font-size:16px}.fit-trust span{display:flex;align-items:center;gap:10px}
+            @media(max-width:980px){.fit-upsell{max-width:390px;padding:12px}.fit-pill{font-size:12px;padding:7px 12px;border-radius:10px}.fit-pill::before{width:13px;height:13px}.fit-hero h1{font-size:25px;margin-top:14px}.fit-hero h2{font-size:20px}.fit-hero p{font-size:13px;max-width:260px}.fit-main-grid,.fit-top-panels{grid-template-columns:1fr}.fit-photo-card{min-height:350px}.fit-logo-card{top:14px;left:14px;padding:8px 11px}.fit-logo-line{font-size:20px}.fit-logo-mark{width:30px;height:30px}.fit-logo-card small{font-size:10px}.fit-photo-card::after{left:12px;right:12px;bottom:12px;height:50%}.fit-overlay{left:24px;right:24px;bottom:26px}.fit-member{font-size:11px}.fit-overlay h3{font-size:21px;margin:8px 0}.fit-overlay p{display:none}.fit-mini-grid{gap:10px}.fit-mini-icon{width:38px;height:38px;font-size:20px}.fit-mini strong{font-size:13px}.fit-mini span{font-size:11px}.fit-panel{padding:16px}.fit-panel-title{margin:-16px -16px 12px;padding:9px 16px;font-size:13px}.fit-feature{grid-template-columns:48px 1fr;gap:10px;margin:10px 0}.fit-feature-icon{width:42px;height:42px;font-size:22px}.fit-feature h4{font-size:15px}.fit-feature p,.fit-bonus p,.fit-bonus li{font-size:12px}.fit-bonus{border-left:0}.fit-bonus-title{font-size:13px}.fit-bonus h3{font-size:21px}.fit-bonus-value{font-size:13px}.fit-price-card{grid-template-columns:1fr 1fr;gap:7px;padding:14px}.fit-price-label{font-size:12px}.fit-old-price{font-size:20px}.fit-tag{font-size:11px;padding:8px}.fit-current small{font-size:12px}.fit-current strong{font-size:32px}.fit-current span{font-size:10px}.fit-save{width:82px;height:82px;justify-self:center}.fit-save strong{font-size:24px}.fit-consent-card{grid-template-columns:1fr;padding:12px;gap:8px}.fit-choice{grid-template-columns:30px 1fr;gap:12px}.fit-choice input{width:26px;height:26px}.fit-choice strong{font-size:15px}.fit-choice span span{font-size:12px}.fit-secure{border-left:0;border-top:1px solid var(--fit-line);padding:10px 0 0;font-size:11px}.fit-secure-icon{font-size:20px}.fit-cta{min-height:70px;font-size:16px}.fit-cta small{font-size:12px}.fit-trust{gap:14px;font-size:10px;align-items:flex-start}.fit-trust span{display:block;text-align:center}.fit-upsell-shell{padding:8px 8px 16px}}
+        </style>
+    </head>
+    <body>
+        <main class="fit-upsell-shell">
+            <section class="fit-upsell">
+                <header class="fit-hero">
+                    <div class="fit-pill">Special one-time upgrade</div>
+                    <h1>Upgrade to FitAccess Today</h1>
+                    <h2>More Guidance. Better Results. All in One Place.</h2>
+                    <p>Join thousands of members getting stronger, staying consistent, and seeing real results.</p>
+                </header>
+
+                <div class="fit-main-grid">
+                    <section class="fit-photo-card" aria-label="FitAccess member area preview">
+                        <div class="fit-logo-card">
+                            <div class="fit-logo-line"><span class="fit-logo-mark">F</span>FitAccess</div>
+                            <small>fitaccess.app</small>
+                        </div>
+                        <div class="fit-overlay">
+                            <div class="fit-member">FitAccess member area</div>
+                            <h3>Everything you need.<br>All in one place.</h3>
+                            <p>Your personalized dashboard to plan, track, and succeed with confidence.</p>
+                            <div class="fit-mini-grid">
+                                <div class="fit-mini"><div class="fit-mini-icon blue">H</div><strong>Workout Programs</strong><span>for every goal</span></div>
+                                <div class="fit-mini"><div class="fit-mini-icon green">M</div><strong>Meal Guidance</strong><span>simple recipes &amp; macros</span></div>
+                                <div class="fit-mini"><div class="fit-mini-icon purple">P</div><strong>Progress Tools</strong><span>track, measure &amp; improve</span></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="fit-side">
+                        <div class="fit-top-panels">
+                            <section class="fit-panel">
+                                <div class="fit-panel-title">Exclusive member upgrade</div>
+                                <div class="fit-feature"><div class="fit-feature-icon blue">H</div><div><h4>Workout Programs</h4><p>for home or gym, matched to your goal &amp; level.</p></div></div>
+                                <div class="fit-feature"><div class="fit-feature-icon green">M</div><div><h4>Meal Guidance</h4><p>with simple recipes, macros, and weekly direction.</p></div></div>
+                                <div class="fit-feature"><div class="fit-feature-icon purple">P</div><div><h4>Progress Tools</h4><p>to track streaks, activity, weight, and more.</p></div></div>
+                            </section>
+                            <section class="fit-panel fit-bonus">
+                                <div class="fit-bonus-title">Bonus - today only!</div>
+                                <h3>Extra Motivation.<br>Extra Results.</h3>
+                                <p>Get exclusive bonus resources to jumpstart your success.</p>
+                                <ul><li>Quick Start Guide</li><li>Goal Setting Workbook</li><li>Healthy Recipe eBook</li></ul>
+                                <div class="fit-bonus-value">$59 value - free today!</div>
+                            </section>
+                        </div>
+
+                        <section class="fit-price-card">
+                            <div><div class="fit-price-label">Regular Price</div><div class="fit-old-price">$109.99</div></div>
+                            <div class="fit-tag">Today Only</div>
+                            <div class="fit-current"><small>Your Price Today</small><strong data-upsell-amount>$55.95</strong><span>One-time payment</span></div>
+                            <div class="fit-save"><span>Save</span><strong>49%</strong><span>Today!</span></div>
+                        </section>
+
+                        <section class="fit-consent-card">
+                            <label class="fit-choice">
+                                <input type="checkbox" id="fitnessUpsellConsent" checked>
+                                <span>
+                                    <strong>Yes, add FitAccess to my order</strong>
+                                    <span>By selecting this, I confirm I want instant FitAccess member access added today for only <b data-upsell-amount>$55.95</b> (one-time payment).<br><b>Login details will be emailed after checkout.</b></span>
+                                </span>
+                            </label>
+                            <div class="fit-secure"><div class="fit-secure-icon">&#9826;</div>Secure &amp;<br>100% Protected</div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="form-message fit-error" id="upsellError" style="display:none"></div>
+                <button class="fit-cta" type="button" id="finishUpsell">YES! UPGRADE MY ORDER &amp; UNLOCK FITACCESS NOW<small>One-time payment &bull; Instant access &bull; Cancel anytime</small></button>
+                <div class="fit-trust"><span>Secure Checkout</span><span>30-Day Satisfaction Guarantee</span><span>Trusted by Thousands of Members</span></div>
+            </section>
+        </main>
+
+        <footer class="lander-footer lander-footer-checkout">
+            <div class="lander-footer-inner">
+                <nav class="lander-footer-links" aria-label="Footer links">
+                    <a href="terms.html">Terms &amp; Conditions</a>
+                    <span>|</span>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <span>|</span>
+                    <a href="refund.html">Refund Policy</a>
+                    <span>|</span>
+                    <a href="contact.html">Contact Us</a>
+                </nav>
+            </div>
+            <div class="lander-footer-note">
+                Note: We are not responsible for any reviews, reports, emails, advertisements or blogs that may have led you to this page. If you feel any of these 3rd party reviews, advertisements, blogs or reports may be inaccurate, please contact us immediately. We do not condone or endorse any inaccurate information, statistics and/or claims made by 3rd parties in regards to our product.
+            </div>
+        </footer>
+
+        <script src="js/api-flow.js?v=20260525-1"></script>
+        <script>
+            (function(){
+                const flow=window.yetiApiFlow;
+                const checkout=flow.getState();
+                const finishButton=document.getElementById('finishUpsell');
+                const upsellError=document.getElementById('upsellError');
+                if(!checkout||!checkout.payment||!checkout.payment.cardLast4){window.location.href='checkout.html';return}
+                function setBusy(busy){finishButton.disabled=busy;finishButton.textContent=busy?'Please wait...':'YES! UPGRADE MY ORDER & UNLOCK FITACCESS NOW'}
+                function showError(message){upsellError.textContent=message||'';upsellError.style.display=message?'block':'none'}
+                function clearFlowState(){['yetiReadyFlow','yetiReadyLead','yetiReadyCheckout'].forEach(function(key){try{localStorage.removeItem(key)}catch(error){}try{sessionStorage.removeItem(key)}catch(error){}})}
+                function buildThankYouUrl(state){const customer=state.customer||{};const payment=state.payment||{};const search=new URLSearchParams();search.set('ty','1');search.set('pn',state.productName||'Yeti Crossroads Backpack');search.set('ea',String(Number(state.entryAmount||0)));search.set('ua',String(Number(state.upsellAmount||0)));search.set('up',state.upsellPurchased?'1':'0');search.set('fn',customer.firstName||'');search.set('ln',customer.lastName||'');search.set('em',customer.email||'');search.set('ad',[customer.shippingAddress1||customer.address1||'',customer.shippingCity||customer.city||'',customer.shippingState||customer.state||'',customer.shippingZip||customer.zip||''].filter(Boolean).join(', '));search.set('cb',payment.cardBrand||'');search.set('cl4',payment.cardLast4||'');return 'thankyou.html?'+search.toString()}
+                finishButton.addEventListener('click',async function(){const accepted=document.getElementById('fitnessUpsellConsent').checked;showError('');setBusy(true);const nextState={...flow.getState(),upsellPurchased:accepted,stage:'thankyou'};try{if(accepted){const upsellResponse=await flow.createUpsellPurchase(nextState);nextState.upsell={status:'approved',email:upsellResponse.email||nextState.customer?.email||'',accessExpiresAt:upsellResponse.accessExpiresAt||'',emailQueued:Boolean(upsellResponse.emailQueued),payment:upsellResponse.payment||{}}}const thankYouUrl=buildThankYouUrl(nextState);clearFlowState();window.location.href=thankYouUrl}catch(error){showError(error instanceof Error?error.message:'Unable to complete the upgrade right now.');setBusy(false)}})
+            })();
+        </script>
+    </body>
 </html>
