@@ -9,8 +9,14 @@
     const stateKey = `${storagePrefix}Flow`;
     const leadKey = `${storagePrefix}Lead`;
     const checkoutKey = `${storagePrefix}Checkout`;
+    let runtimeConfig = window.productConfig || {};
+    const runtimeConfigReady = (window.productConfigReady || Promise.resolve(runtimeConfig)).then((config) =>
+    {
+        runtimeConfig = config || runtimeConfig || {};
+        return runtimeConfig;
+    }).catch(() => runtimeConfig || {});
 
-    window.yetiApiFlow = {
+    window.productApiFlow = {
         PUBLIC_API_BASE,
         FITACCESS_UPSELL_URL,
         PROJECT_API_KEY,
@@ -26,8 +32,11 @@
         createUpsellPurchase,
         moneyToNumber,
         formatMoney,
-        brandName
+        brandName,
+        isApiEnabled,
+        getRuntimeConfig
     };
+    window.yetiApiFlow = window.productApiFlow;
 
     function persistLanding(config)
     {
@@ -108,7 +117,7 @@
         }
 
         const payload = {
-            projectApiKey: PROJECT_API_KEY,
+            projectApiKey: getProjectApiKey(),
             click_id: currentClickId,
             requestUri: buildCurrentUrl(),
             pageType: 'Lead',
@@ -120,8 +129,28 @@
             subAffiliateId5: tracking.p3 || ''
         };
 
+        if (!isApiEnabled())
+        {
+            const nextState = {
+                ...state,
+                tracking,
+                api: {
+                    ...(state.api || {}),
+                    clickId: `local-click-${Date.now()}`,
+                    sessionId: `local-session-${Date.now()}`,
+                    trackingClickId: payload.click_id || '',
+                    crmClickSyncStatus: 'local-test',
+                    clickSynced: true
+                }
+            };
+
+            saveState(nextState);
+            return nextState.api.sessionId;
+        }
+
         try
         {
+            await runtimeConfigReady;
             const response = await postJson('/clicks', payload);
             const nextState = {
                 ...state,
@@ -164,7 +193,7 @@
         const customer = state.customer || {};
         const tracking = getEffectiveTracking(state);
         const payload = {
-            projectApiKey: PROJECT_API_KEY,
+            projectApiKey: getProjectApiKey(),
             sessionId: state.api?.sessionId || '',
             click_id: tracking.click_id || '',
             firstName: customer.firstName || '',
@@ -180,6 +209,12 @@
             subAffiliateId: tracking.source || ''
         };
 
+        if (!isApiEnabled())
+        {
+            return { leadId: `local-lead-${Date.now()}`, crmCustomerId: `local-customer-${Date.now()}`, crmLeadSyncStatus: 'local-test' };
+        }
+
+        await runtimeConfigReady;
         const response = await postJson('/leads', payload);
 
         if (response.crmLeadSyncStatus === 'failed')
@@ -196,7 +231,7 @@
         const payment = state.payment || {};
         const tracking = getEffectiveTracking(state);
         const payload = {
-            projectApiKey: PROJECT_API_KEY,
+            projectApiKey: getProjectApiKey(),
             leadId: state.api?.leadId || '',
             sessionId: state.api?.sessionId || '',
             click_id: tracking.click_id || '',
@@ -221,6 +256,12 @@
             ]
         };
 
+        if (!isApiEnabled())
+        {
+            return { orderId: `local-order-${Date.now()}`, crmOrderId: `local-crm-order-${Date.now()}`, crmOrderSyncStatus: 'local-test', trackingPostbackStatus: 'local-test' };
+        }
+
+        await runtimeConfigReady;
         const response = await postJson('/purchase-confirm', payload);
 
         if (response.crmOrderSyncStatus === 'failed')
@@ -261,12 +302,65 @@
             throw new Error('Upsell payment details are incomplete. Please restart checkout.');
         }
 
-        return postJsonAbsolute(FITACCESS_UPSELL_URL, payload);
+        if (!isApiEnabled())
+        {
+            return { upsellOrderId: `local-upsell-${Date.now()}`, crmUpsellSyncStatus: 'local-test' };
+        }
+
+        return postJsonAbsolute(getFitAccessUpsellUrl(), payload);
+    }
+
+    function getRuntimeConfig()
+    {
+        return runtimeConfig || {};
+    }
+
+    function getProjectApiKey()
+    {
+        return getRuntimeConfig().api?.projectApiKey || PROJECT_API_KEY;
+    }
+
+    function getPublicApiBase()
+    {
+        return String(getRuntimeConfig().api?.publicApiBase || PUBLIC_API_BASE).replace(/\/$/, '');
+    }
+
+    function getFitAccessUpsellUrl()
+    {
+        return getRuntimeConfig().api?.fitAccessUpsellEndpoint || FITACCESS_UPSELL_URL;
+    }
+
+    function isApiEnabled()
+    {
+        const protocol = window.location.protocol;
+        const host = String(window.location.hostname || '').toLowerCase();
+        const configuredDomain = String(getRuntimeConfig().domain || '').toLowerCase();
+
+        if (protocol !== 'https:' && protocol !== 'http:') return false;
+        if (!host || host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0') return false;
+        return true;
+    }
+
+    function normalizeApiError(data)
+    {
+        const message = String(data?.message || data?.error || 'Request failed.');
+
+        if (/recently declined/i.test(message) || /720\s*hours/i.test(message))
+        {
+            return 'This payment method could not be approved. Please use a different card or contact support for assistance.';
+        }
+
+        return message.replace(/after\s+\d+\s+hours/ig, 'later');
     }
 
     async function postJson(path, payload)
     {
-        const response = await fetch(`${PUBLIC_API_BASE}${path}`, {
+        if (!isApiEnabled())
+        {
+            return {};
+        }
+
+        const response = await fetch(`${getPublicApiBase()}${path}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -278,7 +372,7 @@
 
         if (!response.ok)
         {
-            throw new Error(data?.message || data?.error || 'Request failed.');
+            throw new Error(normalizeApiError(data));
         }
 
         return data || {};
@@ -286,6 +380,11 @@
 
     async function postJsonAbsolute(url, payload)
     {
+        if (!isApiEnabled())
+        {
+            return {};
+        }
+
         const response = await fetch(url, {
             method: 'POST',
             headers: {

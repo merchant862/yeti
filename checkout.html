@@ -40,7 +40,8 @@ html,body{overflow-x:hidden}.checkout-section{padding:42px 16px}.container{width
   </div>
 </main>
 <footer class="footer"><div class="footer-inner"><div class="footer-links"><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a><a href="refund.html">Refund Policy</a><a href="contact.html">Contact Us</a></div></div><div class="footer-disclaimer">Note: We are not responsible for any reviews, reports, emails, advertisements or blogs that may have led you to this page. If you feel any of these 3rd party reviews, advertisements, blogs or reports may be inaccurate, please contact us immediately. We do not condone or endorse any inaccurate information, statistics and/or claims made by 3rd parties in regards to our product.</div></footer>
-<script src="js/api-flow.js?v=20260525-1"></script>
+<script src="js/project-config.js?v=20260601"></script>
+<script src="js/api-flow.js?v=20260601"></script>
 <script>
 (function()
 {
@@ -141,6 +142,33 @@ html,body{overflow-x:hidden}.checkout-section{padding:42px 16px}.container{width
     });
   }
 
+  function maxCardLength(brand)
+  {
+    const rule=brandRules[brand];
+    return rule?Math.max.apply(null,rule.lengths):19;
+  }
+
+  function formattedMaxLength(maxDigits)
+  {
+    return maxDigits+Math.floor((maxDigits-1)/4);
+  }
+
+  function enforceCardLength(value)
+  {
+    const raw=digits(value);
+    const brand=detectBrand(raw);
+    const max=maxCardLength(brand);
+    cardNumber.maxLength=formattedMaxLength(max);
+    return raw.slice(0,max);
+  }
+
+  function enforceCvvLength(value,brand)
+  {
+    const max=(brandRules[brand]&&brandRules[brand].cvv.includes(4))?4:3;
+    cardCvv.maxLength=max;
+    return digits(value).slice(0,max);
+  }
+
   function luhn(v)
   {
     const d=digits(v);
@@ -228,9 +256,11 @@ html,body{overflow-x:hidden}.checkout-section{padding:42px 16px}.container{width
 
   cardNumber.addEventListener('input',function()
   {
-    const d=digits(this.value).slice(0,19);
+    const d=enforceCardLength(this.value);
+    const brand=detectBrand(d);
     this.value=d.replace(/(.{4})/g,'$1 ').trim();
-    updateBrand(detectBrand(d));
+    updateBrand(brand);
+    cardCvv.value=enforceCvvLength(cardCvv.value,brand);
     setError('cardNumber',false);
     setError('cardCvv',false);
   });
@@ -248,7 +278,7 @@ html,body{overflow-x:hidden}.checkout-section{padding:42px 16px}.container{width
 
   cardCvv.addEventListener('input',function()
   {
-    this.value=digits(this.value).slice(0,4);
+    this.value=enforceCvvLength(this.value,detectBrand(cardNumber.value));
     setError('cardCvv',false);
   });
 

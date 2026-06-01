@@ -1,0 +1,11 @@
+(function(){
+  function clean(value){return String(value||'').trim()}
+  function deepMerge(base,extra){const out={...(base||{})};Object.keys(extra||{}).forEach(function(key){const value=extra[key];if(value&&typeof value==='object'&&!Array.isArray(value)){out[key]=deepMerge(out[key]||{},value)}else if(value!==undefined&&value!==null&&value!==''){out[key]=value}});return out}
+  function normalize(raw){const cfg=deepMerge({},raw||{});cfg.legalBusinessName=clean(cfg.legalBusinessName);cfg.brandDomain=clean(cfg.brandDomain||cfg.brand);cfg.supportEmail=clean(cfg.supportEmail);cfg.customerSupportPhone=clean(cfg.customerSupportPhone||cfg.phone);cfg.businessAddress=clean(cfg.businessAddress||cfg.address);return cfg}
+  function setText(selector,value){document.querySelectorAll(selector).forEach(function(el){el.textContent=value||''})}
+  function apply(cfg){if(!document.body)return;setText('[data-business-name]',cfg.legalBusinessName);setText('[data-business-domain]',cfg.brandDomain);setText('[data-support-email]',cfg.supportEmail);setText('[data-support-phone]',cfg.customerSupportPhone);setText('[data-business-address]',cfg.businessAddress);document.querySelectorAll('[data-support-email]').forEach(function(el){if(el.tagName==='A'){el.href=cfg.supportEmail?'mailto:'+cfg.supportEmail:'#'}})}
+  function loadScriptConfig(){return new Promise(function(resolve){if(window.__PROJECT_DETAILS__){resolve(window.__PROJECT_DETAILS__);return}const script=document.createElement('script');script.src='project-details.js?v=20260601';script.onload=function(){resolve(window.__PROJECT_DETAILS__||{})};script.onerror=function(){resolve({})};document.head.appendChild(script)})}
+  function loadJsonConfig(){return fetch('project-details.json',{cache:'no-store'}).then(function(response){return response.ok?response.json():{}})}
+  function loadConfig(){if(window.__PROJECT_DETAILS__)return Promise.resolve(window.__PROJECT_DETAILS__);if(window.location.protocol==='file:')return loadScriptConfig();return loadJsonConfig().catch(function(){return loadScriptConfig()})}
+  window.productConfigReady=loadConfig().then(function(raw){const cfg=normalize(raw);window.productConfig=cfg;apply(cfg);return cfg});
+})();
