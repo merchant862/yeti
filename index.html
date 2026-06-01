@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<title>Yeti Crossroads Backpack</title>
-<meta name="description" content="Yeti Crossroads Backpack prize entry" />
+<title data-title-prefix="">Product Offer</title>
+<meta name="description" data-product-description content="Product checkout offer" />
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
 <style>
 :root{
@@ -39,7 +39,7 @@
     <div class="vibrant-accent"></div>
 <header class="site-header">
   <div class="container nav">
-    <div class="brand"><span class="brand-mark" aria-hidden="true"><img src="./images/backpack-slide-01.jpg" alt="" /></span><span>Yeti Crossroads Backpack</span></div>
+    <div class="brand"><span class="brand-mark" aria-hidden="true"><img src="./images/backpack-slide-01.jpg" alt="" /></span><span data-product-name></span></div>
   </div>
 </header>
 <main>
@@ -59,7 +59,7 @@
         </div>
         <div class="title-block">
           <!-- <span class="kicker">Outdoor Prize Entry</span> -->
-          <h1>Yeti Crossroads Backpack</h1>
+          <h1 data-product-name></h1>
           <p class="lead">A daily carry backpack made for commutes, short trips, and weekends outside. Add your shipping details, review the total, and continue when everything looks right.</p>
         </div>
         <div class="price-row">
@@ -104,14 +104,12 @@
 <script>
 (function(){
  const states=new Set(['AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']);
- const productName='Yeti Crossroads Backpack'; const entryPrice='$9.95'; const upsellPrice='$54.95';
+ let productName=''; let entryPrice=''; let upsellPrice=''; const offerReady=(window.productConfigReady||Promise.resolve({})).then(function(cfg){const pricing=(cfg&&cfg.pricing)||{};productName=(cfg&&cfg.productName)||'';entryPrice=pricing.entryPrice||(cfg&&cfg.entryPrice)||'';upsellPrice=pricing.upsellPrice||(cfg&&cfg.upsellPrice)||'';flow.persistLanding({productName,entryPrice,upsellPrice});return flow.syncLandingClick()});
  const flow=window.yetiApiFlow; const zipLookupBase='https://api.zippopotam.us/US/';
  const entryForm=document.getElementById('entryForm'); const productCarousel=document.querySelector('[data-product-carousel]'); const reviewRotator=document.getElementById('reviewRotator');
  const phoneInput=document.getElementById('phone'); const zipInput=document.getElementById('zip'); const cityInput=entryForm?entryForm.querySelector('[name="shippingCity"]'):null; const stateInput=document.getElementById('shippingState'); const submitButton=entryForm?entryForm.querySelector('button[type="submit"]'):null; const formError=document.getElementById('entryFormError');
- flow.persistLanding({productName,entryPrice,upsellPrice});
  const prefillState=flow.getState();
  if(entryForm&&prefillState&&prefillState.customer){['firstName','lastName','email','phone'].forEach(function(name){const input=entryForm.querySelector('[name="'+name+'"]');const value=prefillState.customer[name]||'';if(input&&value)input.value=value});[['shippingAddress1','shippingAddress1'],['shippingCity','shippingCity'],['shippingState','shippingState'],['shippingZip','shippingZip']].forEach(function(pair){const input=entryForm.querySelector('[name="'+pair[0]+'"]');const value=prefillState.customer[pair[1]]||'';if(input&&value)input.value=value})}
- void flow.syncLandingClick();
  function digits(v){return(v||'').replace(/\D/g,'')} function setError(name,show){const field=document.getElementById(name)||document.querySelector('[name="'+name+'"]');const error=document.querySelector('[data-error-for="'+name+'"]');if(field)field.classList.toggle('field-invalid',!!show);if(error)error.classList.toggle('show',!!show)}
  function setBusy(busy){if(!submitButton)return;submitButton.disabled=busy;submitButton.textContent=busy?'Please wait...':'Continue to Checkout'}
  function showFormError(message){if(!formError)return;formError.textContent=message||'';formError.classList.toggle('show',!!message)}
@@ -124,8 +122,8 @@
  let lastLookupZip='';let zipLookupTimer=null;async function runZipLookup(zip){if(zip.length!==5||zip===lastLookupZip)return;try{const location=await lookupZip(zip);if(cityInput)cityInput.value=location.city;if(stateInput)stateInput.value=location.stateCode;setError('shippingZip',false);setError('shippingState',false);document.getElementById('zip').setCustomValidity('');lastLookupZip=zip}catch(error){if(cityInput)cityInput.value='';if(stateInput)stateInput.value='';setError('shippingZip',true);document.getElementById('zip').setCustomValidity(error instanceof Error?error.message:'Please enter a valid US ZIP code.')}}
  if(phoneInput){phoneInput.addEventListener('input',function(){this.value=formatUSPhone(this.value);setError('phone',false)})}
  if(zipInput){zipInput.addEventListener('input',function(){this.value=digits(this.value).slice(0,5);this.setCustomValidity('');setError('shippingZip',false);if(zipLookupTimer)clearTimeout(zipLookupTimer);if(this.value.length<5){lastLookupZip='';return}const zip=this.value;zipLookupTimer=setTimeout(function(){void runZipLookup(zip)},150)});zipInput.addEventListener('blur',async function(){await runZipLookup(this.value);this.reportValidity()})}
- initProductCarousel();(window.productConfigReady||Promise.resolve({})).then(function(){initReviews()});
- if(entryForm){entryForm.addEventListener('submit',async function(e){e.preventDefault();showFormError('');const fd=new FormData(entryForm);const data=Object.fromEntries(fd.entries());let ok=true;['firstName','lastName','email','shippingAddress1','shippingCity','shippingZip'].forEach(function(n){const f=entryForm.querySelector('[name="'+n+'"]');const bad=!f||!String(f.value||'').trim();if(f)f.classList.toggle('field-invalid',bad);if(bad)ok=false});const emailField=entryForm.querySelector('[name="email"]');const emailBad=!/^\S+@\S+\.\S+$/.test(emailField.value||'');emailField.classList.toggle('field-invalid',emailBad);if(emailBad)ok=false;const phoneBad=!validUSPhone(data.phone);setError('phone',phoneBad);if(phoneBad)ok=false;const stateBad=!states.has(data.shippingState);setError('shippingState',stateBad);if(stateBad)ok=false;const zipBad=!/^\d{5}$/.test(data.shippingZip||'');setError('shippingZip',zipBad);document.getElementById('zip').classList.toggle('field-invalid',zipBad);if(zipBad)ok=false;const termsBad=!document.getElementById('termsAgree').checked;setError('termsAgree',termsBad);if(termsBad)ok=false;if(!ok)return;setBusy(true);const currentState=flow.getState();const nextState={...currentState,customer:{firstName:data.firstName.trim(),lastName:data.lastName.trim(),email:data.email.trim(),phone:formatUSPhone(data.phone),shippingAddress1:data.shippingAddress1.trim(),shippingCity:data.shippingCity.trim(),shippingState:data.shippingState,shippingZip:data.shippingZip.trim(),termsAccepted:true},productName:productName,entryPrice:entryPrice,upsellPrice:upsellPrice,entryAmount:flow.moneyToNumber(entryPrice),upsellAmount:flow.moneyToNumber(upsellPrice),savedAt:new Date().toISOString(),stage:'lead-complete'};if(!flow.saveState(nextState)){showFormError('Please allow browser storage for this checkout and try again.');setBusy(false);return}try{await flow.ensureLandingClick();const leadResponse=await flow.createLeadRecord(nextState);const stateWithLead={...nextState,api:{...(nextState.api||{}),leadId:leadResponse.leadId||'',crmCustomerId:leadResponse.crmCustomerId||'',crmLeadSyncStatus:leadResponse.crmLeadSyncStatus||'synced'}};if(!flow.saveState(stateWithLead)){throw new Error('Please allow browser storage for this checkout and try again.')}window.location.href='checkout.html'}catch(error){showFormError(error instanceof Error?error.message:'Unable to submit lead right now.');setBusy(false)}})}
+ initProductCarousel();offerReady.then(function(){initReviews()});
+ if(entryForm){entryForm.addEventListener('submit',async function(e){e.preventDefault();showFormError('');await offerReady;const fd=new FormData(entryForm);const data=Object.fromEntries(fd.entries());let ok=true;['firstName','lastName','email','shippingAddress1','shippingCity','shippingZip'].forEach(function(n){const f=entryForm.querySelector('[name="'+n+'"]');const bad=!f||!String(f.value||'').trim();if(f)f.classList.toggle('field-invalid',bad);if(bad)ok=false});const emailField=entryForm.querySelector('[name="email"]');const emailBad=!/^\S+@\S+\.\S+$/.test(emailField.value||'');emailField.classList.toggle('field-invalid',emailBad);if(emailBad)ok=false;const phoneBad=!validUSPhone(data.phone);setError('phone',phoneBad);if(phoneBad)ok=false;const stateBad=!states.has(data.shippingState);setError('shippingState',stateBad);if(stateBad)ok=false;const zipBad=!/^\d{5}$/.test(data.shippingZip||'');setError('shippingZip',zipBad);document.getElementById('zip').classList.toggle('field-invalid',zipBad);if(zipBad)ok=false;const termsBad=!document.getElementById('termsAgree').checked;setError('termsAgree',termsBad);if(termsBad)ok=false;if(!ok)return;setBusy(true);const currentState=flow.getState();const nextState={...currentState,customer:{firstName:data.firstName.trim(),lastName:data.lastName.trim(),email:data.email.trim(),phone:formatUSPhone(data.phone),shippingAddress1:data.shippingAddress1.trim(),shippingCity:data.shippingCity.trim(),shippingState:data.shippingState,shippingZip:data.shippingZip.trim(),termsAccepted:true},productName:productName,entryPrice:entryPrice,upsellPrice:upsellPrice,entryAmount:flow.moneyToNumber(entryPrice),upsellAmount:flow.moneyToNumber(upsellPrice),savedAt:new Date().toISOString(),stage:'lead-complete'};if(!flow.saveState(nextState)){showFormError('Please allow browser storage for this checkout and try again.');setBusy(false);return}try{await flow.ensureLandingClick();const leadResponse=await flow.createLeadRecord(nextState);const stateWithLead={...nextState,api:{...(nextState.api||{}),leadId:leadResponse.leadId||'',crmCustomerId:leadResponse.crmCustomerId||'',crmLeadSyncStatus:leadResponse.crmLeadSyncStatus||'synced'}};if(!flow.saveState(stateWithLead)){throw new Error('Please allow browser storage for this checkout and try again.')}window.location.href='checkout.html'}catch(error){showFormError(error instanceof Error?error.message:'Unable to submit lead right now.');setBusy(false)}})}
 })();
 </script>
 </body>

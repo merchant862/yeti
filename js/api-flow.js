@@ -1,8 +1,8 @@
 (function ()
 {
-    const PUBLIC_API_BASE = 'https://api.drawzoffers.com/api/public';
-    const FITACCESS_UPSELL_URL = 'https://www.fitaccess.app/api/integrations/upsell-purchases';
-    const PROJECT_API_KEY = '4cb5ac3a-b79f-4593-bc72-6a8b8fe974f0';
+    const PUBLIC_API_BASE = '';
+    const FITACCESS_UPSELL_URL = '';
+    const PROJECT_API_KEY = '';
     const DEFAULT_COUNTRY_ISO = 'US';
     const DEFAULT_ITEM_KEY = 'main';
     const storagePrefix = 'yetiReady';
@@ -45,9 +45,9 @@
         const hasIncomingParams = params.toString().length > 0;
         const stored = getState();
         const defaultState = {
-            productName: config.productName || 'Main Offer',
-            entryPrice: config.entryPrice || '$0.00',
-            upsellPrice: config.upsellPrice || '$0.00',
+            productName: config.productName || '',
+            entryPrice: config.entryPrice || '',
+            upsellPrice: config.upsellPrice || '',
             entryAmount: moneyToNumber(config.entryPrice || 0),
             upsellAmount: moneyToNumber(config.upsellPrice || 0),
             tracking: incomingTracking,
@@ -107,6 +107,10 @@
 
     async function syncLandingClick()
     {
+        if (isApiEnabled())
+        {
+            await runtimeConfigReady;
+        }
         const state = getState();
         const tracking = getEffectiveTracking(state);
         const currentClickId = tracking.click_id || '';
@@ -190,6 +194,10 @@
 
     async function createLeadRecord(state)
     {
+        if (isApiEnabled())
+        {
+            await runtimeConfigReady;
+        }
         const customer = state.customer || {};
         const tracking = getEffectiveTracking(state);
         const payload = {
@@ -227,6 +235,10 @@
 
     async function createPurchase(state)
     {
+        if (isApiEnabled())
+        {
+            await runtimeConfigReady;
+        }
         const customer = state.customer || {};
         const payment = state.payment || {};
         const tracking = getEffectiveTracking(state);
@@ -274,6 +286,10 @@
 
     async function createUpsellPurchase(state)
     {
+        if (isApiEnabled())
+        {
+            await runtimeConfigReady;
+        }
         const customer = state.customer || {};
         const payment = state.payment || {};
         const fullName = [customer.firstName, customer.lastName].filter(Boolean).join(' ').trim();
@@ -418,19 +434,19 @@
             shippingState: customer.shippingState || customer.state || '',
             shippingZip: customer.shippingZip || customer.zipCode || customer.zip || '',
             termsAccepted: Boolean(customer.termsAccepted),
-            product: state.productName || 'Main Offer',
-            entryPrice: state.entryPrice || '$0.00',
+            product: state.productName || '',
+            entryPrice: state.entryPrice || '',
             savedAt: state.savedAt || new Date().toISOString()
         });
 
         writeJson(sessionStorage, checkoutKey, {
             status: state.stage === 'thankyou' || state.stage === 'checkout-complete' ? 'completed' : '',
-            product: state.productName || 'Main Offer',
+            product: state.productName || '',
             cardLast4: payment.cardLast4 || '',
             cardBrand: payment.cardBrand || '',
-            amountCharged: state.entryPrice || '$0.00',
+            amountCharged: state.entryPrice || '',
             upsellConsent: state.upsellPurchased ? 'accepted' : 'declined',
-            upsellPrice: state.upsellPurchased ? (state.upsellPrice || '$0.00') : '$0.00',
+            upsellPrice: state.upsellPurchased ? (state.upsellPrice || '') : '',
             upsellProduct: 'FitAccess',
             totalCharged: formatMoney(Number(state.entryAmount || 0) + (state.upsellPurchased ? Number(state.upsellAmount || 0) : 0)),
             completedAt: state.completedAt || new Date().toISOString()
